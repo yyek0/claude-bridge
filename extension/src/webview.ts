@@ -12,6 +12,7 @@ import typescript from 'highlight.js/lib/languages/typescript'
 import xml from 'highlight.js/lib/languages/xml'
 import yaml from 'highlight.js/lib/languages/yaml'
 import diff from 'highlight.js/lib/languages/diff'
+import { installTooltips } from './tooltips'
 
 declare function acquireVsCodeApi(): {
   postMessage(message: object): void
@@ -41,6 +42,7 @@ const dialogs = el<HTMLSelectElement>('dialogs')
 const history = el('history')
 const current = el('turn')
 const scroller = el('scroll')
+const refreshTooltips = installTooltips(el('tooltip'))
 
 type Turn = { text: string; output: string; stopping: boolean }
 type Message = { prompt: string; answer: string }
@@ -140,7 +142,7 @@ function render(next: State) {
   el<HTMLButtonElement>('selection').disabled = blocked
   toggle('empty', !next.turn && !next.history.length)
   el('empty-detail').textContent = online ? 'Отправьте сообщение или выберите существующий диалог.'
-    : 'Подключите устройство, чтобы открыть чат.'
+    : 'Нажмите «Подключить» и вставьте токен устройства (cb_…).'
   const notice = next.notice || (next.status === 'offline' || next.status === 'unconfigured' ? next.connectionDetail : '')
   toggle('notice', !!notice)
   el('notice').textContent = notice
@@ -183,8 +185,8 @@ function render(next: State) {
       name.title = label
       const button = document.createElement('button')
       button.type = 'button'
-      button.title = 'Убрать вложение'
-      button.setAttribute('aria-label', button.title + ': ' + label)
+      button.dataset.tooltip = 'Убрать это вложение из следующего сообщения.'
+      button.setAttribute('aria-label', 'Убрать вложение: ' + label)
       button.textContent = '×'
       button.addEventListener('click', () => send('remove', { index }))
       item.append(name, button)
@@ -199,6 +201,7 @@ function render(next: State) {
     el('approval-detail').textContent = next.approval.detail
     el('accept').textContent = next.approval.action
   }
+  refreshTooltips()
 }
 
 function submit() {

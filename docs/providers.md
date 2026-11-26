@@ -7,7 +7,7 @@
 Для этого backend нужен API-ключ Claude Console. Для первого платного теста укажите ID модели, доступной вашему workspace Claude Console. Настройки хранятся только на сервере.
 
 ```dotenv
-ANTHROPIC_MODELS=claude-sonnet-5-5
+ANTHROPIC_MODELS=claude-sonnet-4-6
 ANTHROPIC_API_KEY=
 ANTHROPIC_BASE_URL=https://api.anthropic.com/v1
 # Укажите ID workspace, если он нужен для выбранного ключа.

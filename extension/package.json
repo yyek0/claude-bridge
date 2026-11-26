@@ -2,7 +2,7 @@
   "name": "claude-bridge",
   "displayName": "Claude Bridge",
   "description": "A local coding agent connected to your self-hosted model gateway.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "localbridge",
   "private": true,
   "engines": {
@@ -61,9 +61,22 @@
       {
         "command": "claudeBridge.addSelection",
         "title": "Claude Bridge: Добавить выделение в чат"
+      },
+      {
+        "command": "claudeBridge.help",
+        "title": "Claude Bridge: Открыть руководство",
+        "shortTitle": "Руководство",
+        "icon": "$(question)"
       }
     ],
     "menus": {
+      "view/title": [
+        {
+          "command": "claudeBridge.help",
+          "when": "view == claudeBridge.chat",
+          "group": "navigation"
+        }
+      ],
       "editor/context": [
         {
           "command": "claudeBridge.addSelection",
@@ -101,7 +114,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && node build.mjs",
-    "package": "npm run build && vsce package --allow-missing-repository --skip-license --no-dependencies -o ../artifacts/claude-bridge-0.1.0.vsix"
+    "package": "npm run build && vsce package --allow-missing-repository --skip-license --no-dependencies -o ../artifacts/claude-bridge-0.1.1.vsix"
   },
   "dependencies": {
     "diff": "9.0.0",

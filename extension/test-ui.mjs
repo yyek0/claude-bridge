@@ -103,7 +103,22 @@ async function absent(file) {
 
 try {
   await revealPanel()
+  const tooltip = chat.getByRole('tooltip')
+  if (await get('new').isDisabled()) {
+    await get('new').locator('..').hover(wait)
+    await tooltip.getByText('Подключите сервер', { exact: false }).waitFor(wait)
+  }
   await configure()
+  await get('new').hover(wait)
+  await tooltip.getByText('Новый диалог', { exact: false }).waitFor(wait)
+  await get('scroll').hover(wait)
+  await get('selection').focus(wait)
+  await tooltip.getByText('Сначала выделите код', { exact: false }).waitFor(wait)
+  assert.equal(await get('selection').getAttribute('aria-describedby'), 'tooltip')
+  await page.keyboard.press('Escape')
+  await tooltip.waitFor({ state: 'hidden', ...wait })
+  assert.equal(await get('selection').getAttribute('aria-describedby'), null)
+  console.log('Icon explanations appear on hover and keyboard focus, and dismiss with Escape')
   await get('turn').evaluate(element => {
     const deltas = globalThis.bridgeTestDeltas = []
     new MutationObserver(() => {
@@ -206,6 +221,8 @@ try {
   await quickInput.fill(fixture, wait)
   await quickInput.press('Enter')
   await get('attachments').getByText('sample.txt', { exact: true }).waitFor(wait)
+  await chat.getByRole('button', { name: 'Убрать вложение: sample.txt' }).hover(wait)
+  await tooltip.getByText('Убрать это вложение', { exact: false }).waitFor(wait)
   count = await send('Проверка вложения')
   assert.match(await completed(count), /Локальный контекст получен/)
   await get('attachments').waitFor({ state: 'hidden', ...wait })

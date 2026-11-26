@@ -48,6 +48,22 @@ button.primary { background: var(--vscode-button-background); color: var(--vscod
 button.primary:hover:enabled { background: var(--vscode-button-hoverBackground); }
 button.quiet { background: transparent; color: var(--vscode-textLink-foreground); }
 button.square { width: 27px; padding: 2px; flex: none; font-size: 1.12rem; }
+.icon-control { display: inline-flex; flex: none; }
+.icon-control button:disabled { pointer-events: none; }
+#tooltip {
+  position: fixed;
+  z-index: 10;
+  max-width: min(230px, calc(100vw - 12px));
+  padding: 5px 8px;
+  border: 1px solid var(--vscode-editorHoverWidget-border, var(--line));
+  border-radius: 4px;
+  background: var(--vscode-editorHoverWidget-background, var(--vscode-editor-background));
+  color: var(--vscode-editorHoverWidget-foreground, var(--vscode-foreground));
+  box-shadow: 0 2px 8px var(--vscode-widget-shadow);
+  font-size: .9rem;
+  line-height: 1.4;
+  pointer-events: none;
+}
 select {
   min-width: 0;
   text-overflow: ellipsis;

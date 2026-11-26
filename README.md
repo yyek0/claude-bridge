@@ -2,8 +2,11 @@
 
 Локальный агент для VS Code с backend на собственном VPS. Расширение показывает потоковый чат, историю и действия агента. Оно работает с выбранной рабочей папкой, показывает правки в VS Code Diff и запрашивает подтверждение перед изменением файлов или запуском команды.
 
-- [Руководство пользователя и значения всех значков](docs/guide.md)
-- [Расширение VSIX 0.1.0](artifacts/claude-bridge-0.1.0.vsix) · [Архив backend](artifacts/claude-bridge-server-0.1.0.tar.gz)
+**Первое подключение**
+
+- [Установка на Mac](docs/guide.md#macos) · [Установка на Windows](docs/guide.md#windows)
+- [Настройка Ubuntu VPS и токены устройств](docs/guide.md#ubuntu-vps) · [Ключ Claude API](docs/guide.md#ключ-claude-api) · [Кнопки и значки](docs/guide.md#интерфейс-расширения)
+- [Скачать VSIX 0.1.1](https://github.com/yyek0/claude-bridge/raw/refs/heads/main/artifacts/claude-bridge-0.1.1.vsix) · [Архив backend](artifacts/claude-bridge-server-0.1.0.tar.gz)
 - [Удалённый рабочий стол XFCE](docs/desktop.md) · [Провайдеры моделей](docs/providers.md) · [Архитектура](docs/architecture.md) · [Результаты тестов](docs/testing.md)
 
 ## 1. Установите backend на Ubuntu VPS
@@ -41,7 +44,7 @@ BRIDGE_SSH_PORT=22
 
 ## 3. Подключите VS Code
 
-1. В VS Code откройте **Extensions → … → Install from VSIX…** и выберите [VSIX](artifacts/claude-bridge-0.1.0.vsix).
+1. В VS Code откройте **Extensions → … → Install from VSIX…** и выберите [VSIX](artifacts/claude-bridge-0.1.1.vsix).
 2. Запустите SSH-туннель из корня проекта. Оставьте терминал открытым.
 
    | ОС | Команда в терминале |

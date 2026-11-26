@@ -12,6 +12,7 @@ type Turn = { dialog: string; text: string; output: string; scope?: Workspace; f
 type Approval = { id: string; title: string; detail: string; action: string; finish: (accepted: boolean) => void }
 
 const SECRET = 'claudeBridge.device'
+const GUIDE = 'https://github.com/yyek0/claude-bridge/blob/main/docs/guide.md'
 const TOKEN = /^cb_[A-Za-z0-9_-]{43}$/
 const UUID = /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/
 
@@ -107,7 +108,8 @@ class Chat implements vscode.WebviewViewProvider, vscode.Disposable {
       const config = settings()
       const peer = config.target || config.endpoint
       const token = await vscode.window.showInputBox({
-        title: 'Токен устройства Claude Bridge', prompt: peer, password: true, ignoreFocusOut: true,
+        title: 'Токен устройства Claude Bridge', prompt: 'Скопируйте поле token, выданное на VPS · ' + peer,
+        placeHolder: 'cb_…', password: true, ignoreFocusOut: true,
         validateInput: value => TOKEN.test(value.trim()) ? undefined : 'Вставьте полный токен устройства (cb_…).',
       })
       if (token) {
@@ -174,10 +176,12 @@ class Chat implements vscode.WebviewViewProvider, vscode.Disposable {
 <link rel="stylesheet" href="${asset('media', 'chat.css')}"><title>Claude Bridge</title></head>
 <body>
   <header class="top">
-    <div class="connection-row"><span id="status" data-state="connecting" role="status"></span><button id="configure" class="quiet" type="button">Подключить</button></div>
+    <div class="connection-row"><span id="status" data-state="connecting" role="status"></span><button id="configure" class="quiet" type="button" data-tooltip="Вставить токен устройства с вашего VPS (cb_…).">Подключить</button></div>
     <div class="dialog-row">
       <select id="dialogs" aria-label="Диалоги"></select>
-      <button id="new" class="square" type="button" title="Новый диалог" aria-label="Новый диалог">+</button>
+      <span class="icon-control" data-tooltip="Новый диалог. Текущий разговор остаётся в истории." data-tooltip-disabled="Подключите сервер или дождитесь завершения ответа.">
+        <button id="new" class="square" type="button" aria-label="Новый диалог">+</button>
+      </span>
     </div>
   </header>
   <main id="scroll" tabindex="0" aria-label="Переписка">
@@ -196,8 +200,12 @@ class Chat implements vscode.WebviewViewProvider, vscode.Disposable {
       <textarea id="prompt" rows="3" maxlength="12000" aria-label="Запрос" placeholder="Сообщение или задача для агента"></textarea>
       <div class="compose-actions">
         <select id="model" aria-label="Модель"></select>
-        <button id="attach" class="square" title="Прикрепить файл" aria-label="Прикрепить файл" type="button">↥</button>
-        <button id="selection" class="square" title="Добавить выделение" aria-label="Добавить выделение" type="button">⌗</button>
+        <span class="icon-control" data-tooltip="Прикрепить текстовый файл из выбранной рабочей папки." data-tooltip-disabled="Откройте доверенную папку и дождитесь завершения текущего запроса.">
+          <button id="attach" class="square" aria-label="Прикрепить файл" type="button">↥</button>
+        </span>
+        <span class="icon-control" data-tooltip="Добавить выделение. Сначала выделите код в редакторе." data-tooltip-disabled="Откройте доверенную папку и дождитесь завершения текущего запроса.">
+          <button id="selection" class="square" aria-label="Добавить выделение" type="button">⌗</button>
+        </span>
         <button id="send" class="primary" type="submit">Отправить</button>
         <button id="stop" type="button" hidden>Стоп</button>
       </div>
@@ -205,6 +213,7 @@ class Chat implements vscode.WebviewViewProvider, vscode.Disposable {
     <div class="scope"><label><input id="allow" type="checkbox"> Доступ к рабочей папке</label>
       <select id="folders" aria-label="Рабочая папка"></select></div>
   </footer>
+  <div id="tooltip" role="tooltip" hidden></div>
   <script nonce="${nonce}" src="${asset('dist', 'webview.js')}"></script>
 </body></html>`
   }
@@ -517,6 +526,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('claudeBridge.configure', () => chat.configure()),
     vscode.commands.registerCommand('claudeBridge.disconnect', () => chat.disconnect()),
     vscode.commands.registerCommand('claudeBridge.addSelection', () => chat.addSelection()),
+    vscode.commands.registerCommand('claudeBridge.help', () => vscode.env.openExternal(vscode.Uri.parse(GUIDE))),
     vscode.workspace.onDidChangeConfiguration(event => {
       if (event.affectsConfiguration('claudeBridge')) { void chat.connect() }
     }),
