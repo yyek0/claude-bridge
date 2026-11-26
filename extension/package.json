@@ -1,0 +1,128 @@
+{
+  "name": "claude-bridge",
+  "displayName": "Claude Bridge",
+  "description": "A local coding agent connected to your self-hosted model gateway.",
+  "version": "0.1.0",
+  "publisher": "localbridge",
+  "private": true,
+  "engines": {
+    "vscode": "^1.96.0",
+    "node": ">=22"
+  },
+  "categories": [
+    "AI",
+    "Other"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Chat is available. Local tools require Workspace Trust."
+    },
+    "virtualWorkspaces": {
+      "supported": "limited",
+      "description": "Local tools require a folder on this device."
+    }
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "claudeBridge",
+          "title": "Claude Bridge",
+          "icon": "media/bridge.svg"
+        }
+      ]
+    },
+    "views": {
+      "claudeBridge": [
+        {
+          "id": "claudeBridge.chat",
+          "type": "webview",
+          "name": "Чат"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "claudeBridge.configure",
+        "title": "Claude Bridge: Подключить устройство"
+      },
+      {
+        "command": "claudeBridge.disconnect",
+        "title": "Claude Bridge: Отключить устройство"
+      },
+      {
+        "command": "claudeBridge.addSelection",
+        "title": "Claude Bridge: Добавить выделение в чат"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "claudeBridge.addSelection",
+          "when": "editorHasSelection",
+          "group": "navigation@90"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Claude Bridge",
+      "properties": {
+        "claudeBridge.endpoint": {
+          "type": "string",
+          "scope": "application",
+          "default": "ws://127.0.0.1:18765/ws",
+          "description": "WebSocket address. Use an SSH tunnel with loopback ws://, or a wss:// endpoint with a trusted certificate."
+        },
+        "claudeBridge.sshTarget": {
+          "type": "string",
+          "scope": "application",
+          "default": "",
+          "description": "Optional user@host or SSH alias for automatic tunnel recovery. Requires an existing known_hosts entry and public-key authentication."
+        },
+        "claudeBridge.sshRemotePort": {
+          "type": "integer",
+          "scope": "application",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 18765,
+          "description": "Backend loopback port on the SSH host."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && node build.mjs",
+    "package": "npm run build && vsce package --allow-missing-repository --skip-license --no-dependencies -o ../artifacts/claude-bridge-0.1.0.vsix"
+  },
+  "dependencies": {
+    "diff": "9.0.0",
+    "dompurify": "3.5.0",
+    "highlight.js": "11.12.0",
+    "markdown-it": "15.0.3",
+    "ws": "8.23.0"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "14.2.0",
+    "@types/node": "22.20.7",
+    "@types/vscode": "1.96.0",
+    "@types/ws": "8.18.2",
+    "@vscode/vsce": "4.1.1",
+    "esbuild": "0.28.2",
+    "playwright-core": "1.65.1",
+    "typescript": "7.0.2"
+  },
+  "overrides": {
+    "@vscode/vsce": {
+      "minimatch": "11.0.1"
+    }
+  }
+}

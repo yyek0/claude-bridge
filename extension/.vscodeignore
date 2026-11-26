@@ -1,0 +1,9 @@
+**/*
+!package.json
+!README.md
+!dist/
+!dist/extension.js
+!dist/webview.js
+!media/
+!media/bridge.svg
+!media/chat.css

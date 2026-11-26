@@ -1,0 +1,8 @@
+{
+  "policies": {
+    "Preferences": {
+      "browser.cache.disk.smart_size.enabled": {"Value": false, "Status": "locked"},
+      "browser.cache.disk.capacity": {"Value": 65536, "Status": "locked"}
+    }
+  }
+}

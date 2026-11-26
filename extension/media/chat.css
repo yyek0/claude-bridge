@@ -1,0 +1,125 @@
+:root {
+  color-scheme: light dark;
+  color: var(--vscode-foreground);
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  --line: var(--vscode-panel-border, var(--vscode-editorGroup-border));
+  --muted: var(--vscode-descriptionForeground);
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100vh;
+  margin: 0;
+}
+.top, footer { padding: 10px; }
+.top { border-bottom: 1px solid var(--line); }
+.connection-row, .dialog-row, .compose-actions, .scope, .approval-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.connection-row { justify-content: space-between; min-height: 26px; margin-bottom: 7px; }
+#status { font-size: 0.88rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+#status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--vscode-descriptionForeground); }
+#status[data-state="online"]::before { background: var(--vscode-testing-iconPassed, var(--vscode-charts-green)); }
+#status[data-state="connecting"]::before, #status[data-state="offline"]::before { background: var(--vscode-editorWarning-foreground); }
+#status[data-state="denied"]::before { background: var(--vscode-errorForeground); }
+button, select, textarea { font: inherit; color: inherit; }
+button, select {
+  min-height: 26px;
+  padding: 3px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--vscode-button-border, transparent);
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+}
+button { cursor: pointer; }
+button:hover:enabled { background: var(--vscode-button-secondaryHoverBackground); }
+button:disabled, select:disabled { opacity: .55; cursor: default; }
+button:focus-visible, select:focus-visible, textarea:focus-visible, input:focus-visible, main:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: 1px;
+}
+button.primary { background: var(--vscode-button-background); color: var(--vscode-button-foreground); }
+button.primary:hover:enabled { background: var(--vscode-button-hoverBackground); }
+button.quiet { background: transparent; color: var(--vscode-textLink-foreground); }
+button.square { width: 27px; padding: 2px; flex: none; font-size: 1.12rem; }
+select {
+  min-width: 0;
+  text-overflow: ellipsis;
+  background: var(--vscode-dropdown-background);
+  color: var(--vscode-dropdown-foreground);
+  border-color: var(--vscode-dropdown-border, var(--line));
+}
+.dialog-row select, .compose-actions select { flex: 1 1 0; }
+main { overflow: auto; padding: 8px 10px 16px; scrollbar-width: thin; }
+.empty { padding: 20px 2px 0; color: var(--muted); line-height: 1.5; }
+.empty h1 { color: var(--vscode-foreground); margin: 0 0 6px; font-size: 1.24rem; font-weight: 650; }
+.empty p { margin: 0; }
+article { padding: 10px 0; line-height: 1.53; min-width: 0; overflow-wrap: anywhere; }
+article + article { border-top: 1px solid var(--line); }
+article.user .message-body { white-space: pre-wrap; }
+.message-label { font-weight: 650; margin-bottom: 4px; color: var(--muted); }
+article.assistant .message-label { color: var(--vscode-foreground); }
+.message-body > :first-child { margin-top: 0; }
+.message-body > :last-child { margin-bottom: 0; }
+.message-body p, .message-body ol, .message-body ul { margin: 6px 0; }
+.message-body ul, .message-body ol { padding-left: 19px; }
+.message-body h1, .message-body h2, .message-body h3 { font-size: 1.11rem; margin: 9px 0 5px; }
+.message-body blockquote { margin: 6px 0; padding: 4px 7px; border-left: 2px solid var(--vscode-textBlockQuote-border); }
+a { color: var(--vscode-textLink-foreground); }
+pre, code { font-family: var(--vscode-editor-font-family), monospace; }
+pre {
+  overflow: auto;
+  background: var(--vscode-textCodeBlock-background);
+  border-radius: 4px;
+  padding: 8px;
+  margin: 7px 0;
+  line-height: 1.5;
+}
+:not(pre) > code { background: var(--vscode-textCodeBlock-background); padding: 0 3px; border-radius: 2px; }
+.hljs-keyword, .hljs-selector-tag { color: var(--vscode-symbolIcon-keywordForeground); font-weight: 650; }
+.hljs-string, .hljs-addition { color: var(--vscode-symbolIcon-stringForeground, var(--vscode-charts-green)); }
+.hljs-number, .hljs-literal { color: var(--vscode-symbolIcon-numberForeground, var(--vscode-charts-orange)); }
+.hljs-title, .hljs-attr { color: var(--vscode-symbolIcon-functionForeground, var(--vscode-charts-blue)); }
+.hljs-comment { color: var(--muted); font-style: italic; }
+.hljs-deletion { color: var(--vscode-errorForeground); }
+table { border-collapse: collapse; display: block; overflow-x: auto; }
+td, th { border: 1px solid var(--line); padding: 3px 6px; }
+footer { border-top: 1px solid var(--line); overflow: auto; max-height: 66vh; }
+#activity, #notice { padding-bottom: 7px; font-size: .9rem; color: var(--muted); overflow-wrap: anywhere; }
+#approval {
+  padding: 8px;
+  border: 1px solid var(--vscode-editorWarning-foreground, var(--line));
+  border-radius: 4px;
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+#approval pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 145px; }
+.approval-actions { justify-content: flex-end; flex-wrap: wrap; }
+textarea {
+  width: 100%;
+  display: block;
+  min-height: 60px;
+  max-height: 180px;
+  resize: vertical;
+  padding: 8px;
+  margin: 0 0 6px;
+  border-radius: 5px;
+  border: 1px solid var(--vscode-input-border, var(--line));
+  color: var(--vscode-input-foreground);
+  background: var(--vscode-input-background);
+}
+textarea::placeholder { color: var(--vscode-input-placeholderForeground); }
+.scope { margin-top: 7px; color: var(--muted); font-size: .83rem; flex-wrap: wrap; }
+.scope label { display: inline-flex; align-items: center; gap: 4px; }
+.scope input { margin: 0; accent-color: var(--vscode-button-background); }
+.scope select { min-height: 20px; max-width: 100%; padding: 0 4px; }
+#attachments { display: flex; gap: 4px; flex-wrap: wrap; list-style: none; padding: 0; margin: 0 0 6px; }
+#attachments li { display: flex; align-items: center; gap: 3px; max-width: 100%; border: 1px solid var(--line); border-radius: 4px; padding-left: 4px; }
+#attachments span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#attachments button { min-height: 20px; padding: 0 4px; }

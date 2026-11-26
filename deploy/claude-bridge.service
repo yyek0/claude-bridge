@@ -1,0 +1,37 @@
+[Unit]
+Description=Claude Bridge model gateway
+After=network.target
+
+[Service]
+Type=simple
+User=claude-bridge
+Group=claude-bridge
+WorkingDirectory=/opt/claude-bridge/current
+EnvironmentFile=/etc/claude-bridge/backend.env
+Environment=PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/claude-bridge/current/.venv/bin/python -m uvicorn bridge.app:app --host 127.0.0.1 --port 18765 --workers 1 --ws websockets-sansio --ws-max-size 128000 --ws-max-queue 8 --ws-ping-interval 15 --ws-ping-timeout 15 --ws-per-message-deflate false --no-access-log
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=12
+StateDirectory=claude-bridge
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=strict
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+MemoryHigh=240M
+MemoryMax=400M
+TasksMax=40
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
